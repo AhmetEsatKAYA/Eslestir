@@ -6,35 +6,72 @@
     <title>Eşleştirme Oyunu</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f7fb;
+            font-family: Arial;
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10 and IE 11 */
+            user-select: none; /* Standard syntax */
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Tüm ekran yüksekliği */
+        }
+        #ust {
+            background-color: white;
             text-align: center;
-            background-color: #f0f0f0;
+            padding: 10px;
+        }
+        #oyun {
+            text-align: center;
+            background-color: #f6f7fb;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1; /* Boş alanı doldur */
+            height: calc(100vh - 50px); /* Üst kısım hariç kalan yükseklik */
         }
 
         #game-board {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 10px;
+            display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            margin: 20px auto;
-            max-width: 660px; /* Toplam genişlik 4 kart x 150px + boşluk */
+            gap: 10px;
+            margin: 12px;
+            max-width: 100%; /* Maksimum genişliği yüzdeye çevirdik */
+            padding: 10px; /* Kenar boşluklarını ekledik */
+            box-sizing: border-box; /* Kenar boşluklarının kutu boyutuna dahil edilmesi */
+            height: 100%; /* Tam yükseklik */
         }
 
         .card {
-            width: 150px;
-            height: 150px;
+            width: calc(25% - 20px); /* Ekrana daha fazla kart sığdırmak için genişliği yüzde olarak belirledik ve boşlukları hesaba kattık */
+            flex-grow: 1;
             background-color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
             cursor: pointer;
-            border: 1px solid #333;
             text-align: center;
-            padding: 10px;
+            padding: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             box-sizing: border-box;
+            margin: 5px;
+        }
+
+        @media (max-width: 800px) {
+            .card {
+                width: calc(33.33% - 20px); /* Orta boyutlu ekranlar için genişlik ayarı */
+            }
+        }
+
+        @media (max-width: 500px) {
+            .card {
+                width: calc(50% - 20px); /* Küçük ekranlar için genişlik ayarı */
+            }
         }
 
         .card.matched {
@@ -73,25 +110,24 @@
             font-size: 18px;
             cursor: pointer;
         }
+
+        #timer {
+            padding: 12px;
+            font-weight: bold;
+        }
     </style>
-</head>
-<body>
-    <h1>Eşleştirme Oyunu</h1>
-    <div id="game-board"></div>
-    <div id="timer">Süre: 0.0</div>
-    <button onclick="startGame()">Oyunu Başlat</button>
-    <div id="win-screen" style="display: none">
-        <h1>Tebrikler! Tüm eşleştirmeleri tamamladınız!</h1>
-        <button onclick="startGame()">Tekrar Oyna</button>
-    </div>
     <script>
         var cards = [
-            { word: 'Elma', meaning: 'Bir meyve' },
-            { word: 'Bilgisayar', meaning: 'Bir elektronik cihaz' },
-            { word: 'Kitap', meaning: 'Okumak için yazılmış eser' },
-            { word: 'Köpek', meaning: 'Evcil bir hayvan' },
-            { word: 'Araba', meaning: 'Bir ulaşım aracı' },
-            { word: 'Ev', meaning: 'İçinde yaşanılan yapı' },
+            { word: 'hello', meaning: 'merhaba' },
+            { word: 'get well soon', meaning: 'geçmiş olsun' },
+            { word: 'dollar', meaning: 'Amerikanın para birimi' },
+            { word: 'bed', meaning: 'yatak' },
+            { word: 'ev', meaning: 'içinde yaşanan, yemek yenen, yatılan yapı' },
+            { word: 'F', meaning: 'f' },
+            { word: 'G', meaning: 'g' },
+            { word: 'ğ', meaning: 'Ğ' },
+            { word: 'h', meaning: 'H' },
+            { word: 'ı', meaning: 'I' },
         ];
 
         var gameCards = [];
@@ -111,8 +147,17 @@
         }
 
         function prepareGameCards() {
+            // Shuffle the cards array
+            shuffle(cards);
+
+            // Select the first 6 cards
+            var selectedCards = cards.slice(0, 6);
+
+            // Clear the gameCards array
             gameCards = [];
-            cards.forEach(function(card) {
+
+            // Prepare gameCards with the selected cards
+            selectedCards.forEach(function(card) {
                 gameCards.push({ type: 'word', content: card.word });
                 gameCards.push({ type: 'meaning', content: card.meaning });
             });
@@ -168,7 +213,7 @@
             } else {
                 card1.classList.add('wrong');
                 card2.classList.add('wrong');
-                timeElapsed += 10; // Yanlış bilindiğinde süreye 1 saniye ekle
+                timeElapsed += 10; // Yanlış bilindiğinde süreye 10 saniye ekle
                 lockBoard = true;
                 setTimeout(function() {
                     card1.className = 'card';
@@ -183,6 +228,7 @@
 
         function showWinScreen() {
             document.getElementById('win-screen').style.display = 'flex';
+            document.getElementById('saniye').innerText = document.getElementById("timer").innerText + " saniye"
         }
 
         function shuffle(array) {
@@ -196,10 +242,10 @@
 
         function startTimer() {
             timeElapsed = 0;
-            document.getElementById('timer').innerText = 'Süre: ' + (timeElapsed / 10).toFixed(1);
+            document.getElementById('timer').innerText = (timeElapsed / 10).toFixed(1);
             timer = setInterval(function() {
                 timeElapsed++;
-                document.getElementById('timer').innerText = 'Süre: ' + (timeElapsed / 10).toFixed(1);
+                document.getElementById('timer').innerText = (timeElapsed / 10).toFixed(1);
             }, 100);
         }
 
@@ -208,8 +254,21 @@
             matchedCards = [];
             clearInterval(timer);
             timeElapsed = 0;
-            document.getElementById('timer').innerText = 'Süre: 0.0';
+            document.getElementById('timer').innerText = '0.0';
         }
     </script>
+</head>
+<body onload="startGame()">
+    <div id="ust">
+        <div id="timer" style="top: 10px"> 0.0 </div>
+    </div>
+    <div id="oyun">
+        <div id="game-board"></div>
+    </div>
+    <div id="win-screen">
+        <h1>Tebrikler, kazandınız!</h1>
+        <h1 id="saniye">0.0 Saniye</h1>
+        <button onclick="startGame()">Tekrar Oyna</button>
+    </div>
 </body>
 </html>
