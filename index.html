@@ -6,6 +6,16 @@
     <title>Eşleştirme Oyunu</title>
     <link rel="stylesheet" href="css.css">
     <script src="js.js"></script>
+    <script>
+    function adjustCardHeight() {
+        var gameBoardContainer = document.getElementById('game-board-container');
+        var cardHeight = (gameBoardContainer.clientHeight - 100) / 3;
+        var cards = document.querySelectorAll('.card');
+        cards.forEach(function(card) {
+            card.style.height = cardHeight + 'px';
+        });
+    }
+    </script>
 </head>
 <body onload="startGame(); adjustCardHeight();">
     <div id="ust">

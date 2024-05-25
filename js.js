@@ -29,14 +29,7 @@ function startGame() {
     document.getElementById('win-screen').style.display = 'none';
     adjustCardHeight()
 }
-function adjustCardHeight() {
-    var gameBoardContainer = document.getElementById('game-board-container');
-    var cardHeight = gameBoardContainer.clientHeight * (window.innerHeight / 1000 - 65) / 3; // Kartların ekran yüksekliğinin yüzde 20'si kadar olacak şekilde ayarlayabilirsiniz.
-    var cards = document.querySelectorAll('.card');
-    cards.forEach(function(card) {
-        card.style.height = cardHeight + 'px';
-    });
-}
+
 function prepareGameCards() {
     // Shuffle the cards array
     shuffle(cards);
