@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eşleştirme Oyunu</title>
     <link rel="stylesheet" href="css.css">
+    <script src="cards.js"></script>
     <script src="js.js"></script>
     <script>
     function adjustCardHeight() {
@@ -15,11 +16,16 @@
             card.style.height = cardHeight + 'px';
         });
     }
+    function hazirlik() {
+        document.getElementById("oyun").style = "display: none;";
+        document.getElementById("timer").innerText = "Eşleştir";
+        document.getElementById('win-screen').style.display = 'none';
+    }
     </script>
 </head>
-<body onload="startGame(); adjustCardHeight();">
+<body onload="hazirlik();">
     <div id="ust">
-        <div id="timer" style="top: 10px"> 0.0 </div>
+        <div id="timer" style="top: 10px">0.0</div>
     </div>
     <div id="oyun">
         <div id="game-board-container">
@@ -30,6 +36,18 @@
         <h1>Tebrikler, kazandınız!</h1>
         <h1 id="saniye">0.0 Saniye</h1>
         <button onclick="startGame()">Tekrar Oyna</button>
+    </div>
+    <div id="acilis">
+        <div id="ac">
+            <img src="image.png" alt="Kartlar">
+            <h2>Oynamaya hazır mısın?</h2>
+            <p style="font-size: 1rem;">Tüm terimleri tanımlarıyla mümkün olan en hızlı şekilde eşletirmelisin. Eşleştirmeyi yanlış yaparsan süre uzar!</p>
+        <center>
+            <br>
+            <button id="st" onclick="startGame();adjustCardHeight();">Oyunu Başlat</button>
+        </center>
+        </div>
+
     </div>
 </body>
 </html>
