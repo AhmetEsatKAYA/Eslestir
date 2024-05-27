@@ -7,13 +7,14 @@ var lockBoard = false;
 
 function startGame() {
     document.getElementById("oyun").style = "display: block;";
+    document.getElementById("tz").innerHTML = "Yeni bir rekora hazır mısın?"
     document.getElementById("acilis").style = "display: none;";
     prepareGameCards();
     shuffle(gameCards);
     createBoard();
     resetGame();
     startTimer();
-    document.getElementById('win-screen').style.display = 'none';
+    // document.getElementById('win-screen').style.display = 'none';
     adjustCardHeight()
 }
 
@@ -98,8 +99,9 @@ function checkMatch() {
 }
 
 function showWinScreen() {
-    document.getElementById('win-screen').style.display = 'flex';
-    document.getElementById('saniye').innerText = document.getElementById("timer").innerText + " saniye"
+    document.getElementById('acilis').style.display = 'block';
+    document.getElementById("oyun").style = "display: none;";
+    // document.getElementById('saniye').innerText = document.getElementById("timer").innerText + " saniye"
 }
 
 function shuffle(array) {
